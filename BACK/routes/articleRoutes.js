@@ -7,7 +7,7 @@ const articleMiddleware = require('../middlewares/articleMiddleware');
 // Routes articles
 router.post('/createArticle', authMiddleware, articleController.createArticle);
 router.get('/getAllArticles', articleController.getAllArticles);
-router.put('/updateUser/:id', articleController.updateArticle);
-router.delete('/deleteUser/:id', articleController.deleteArticle);
+router.put('/updateArticle/:id', articleController.updateArticle);
+router.delete('/deleteArticle/:id', articleController.deleteArticle);
 
 module.exports = router;
