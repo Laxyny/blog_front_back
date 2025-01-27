@@ -108,7 +108,7 @@ exports.deleteArticle = async (req, res) => {
         if (!success) {
             res.status(404).json({ message: 'Article non trouvé' });
         } else {
-            res.status(200).json({ message: 'Aagasin supprimé' });
+            res.status(200).json({ message: 'Article supprimé' });
         }
     } catch (err) {
         res.status(500).json({ message: 'Erreur lors de la suppression de l\'article' });

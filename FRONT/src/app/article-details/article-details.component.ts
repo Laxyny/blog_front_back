@@ -43,7 +43,6 @@ export class ArticleDetailsComponent implements OnInit {
   }
 
   deleteArticle() {
-    //Confirmer que l'on veut supprimer l'article et afficher un popup au cas ou l'utilisateur qui veut supprimer l'article n'est pas l'auteur sauf si c'est un admin
     if (confirm('Voulez-vous vraiment supprimer cet article ?')) {
       this.deleteArticleService.deleteArticle(this.article._id).subscribe({
         next: () => {

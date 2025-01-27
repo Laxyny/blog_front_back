@@ -5,7 +5,6 @@
     <p *ngIf="article.intro != null"><strong>Introduction :</strong> {{ article.intro }}</p>
     <p><strong>Article :</strong> {{ article.article }}</p>
 
-
     <button (click)="deleteArticle()">Supprimer cet article</button>
 </div>
 <div *ngIf="!article">
