@@ -19,7 +19,7 @@ export class ApiBlogService {
 
     postCreateArticle(titre: string, intro: string, article: string): Observable<any> {
         return this.http.post(
-            'http://localhost:3000/register',
+            'http://localhost:3000/createArticle',
             {
                 titre: titre,
                 intro: intro,

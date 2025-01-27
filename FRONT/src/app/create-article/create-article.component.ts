@@ -28,6 +28,11 @@ export class CreateArticleComponent {
       return;
     }
 
+    if (!this.intro) {
+      this.message = 'Veuillez entrer une introduction.';
+      return;
+    }
+
     if (!this.article) {
       this.message = 'Veuillez entrer un article.';
       return;
