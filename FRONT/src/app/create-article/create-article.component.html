@@ -1,0 +1,16 @@
+<h1>Créer son article dans le blog</h1>
+<form (ngSubmit)="onSubmit()" #createShopForm="ngForm">
+    <label for="name">Titre :</label>
+    <input type="text" id="name" name="name" [(ngModel)]="titre" required />
+    <br /><br />
+
+    <label for="description">Introduction :</label>
+    <input type="text" id="description" name="description" [(ngModel)]="intro" required />
+    <br /><br />
+
+    <label for="avatar">Article :</label>
+    <br /><br />
+
+    <button type="submit" [disabled]="!createShopForm.form.valid">Créer un article</button>
+</form>
+<div>{{ message }}</div>

@@ -1,0 +1,35 @@
+<h1>Homepage</h1>
+
+<p>{{ welcomeMessage }}</p>
+<button (click)="logout()">Se déconnecter</button>
+
+<div *ngIf="isAdmin">
+    <h2>Liste des utilisateurs</h2>
+
+    <div *ngIf="users.length > 0; else noUsers">
+        <ul>
+            <li *ngFor="let user of users">
+                <a (click)="goToUserDetails(user._id)">{{ user.name }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <ng-template #noUsers>
+        <p>Il n'y a pas d'utilisateur</p>
+    </ng-template>
+
+    <button (click)="goToCreateArticle()">Créer un article</button>
+</div>
+<div>
+    <h2>Articles du blog</h2>
+    <div *ngIf="articles.length > 0; else noArticles">
+        <ul>
+            <li *ngFor="let article of articles">
+                <a (click)="goToArticleDetails(article._id)">{{ article.titre }}</a>
+            </li>
+        </ul>
+    </div>
+    <ng-template #noArticles>
+        <p>Il n'y a pas d'article</p>
+    </ng-template>
+</div>
