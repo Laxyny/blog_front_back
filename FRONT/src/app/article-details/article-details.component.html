@@ -1,0 +1,13 @@
+<h1>Détails de la boutique</h1>
+<div *ngIf="article">
+    <p>Date de création : {{ article.createAt}}</p>
+    <p><strong>Titre :</strong> {{ article.titre }}</p>
+    <p *ngIf="article.intro != null"><strong>Introduction :</strong> {{ article.intro }}</p>
+    <p><strong>Article :</strong> {{ article.article }}</p>
+ 
+
+    <button (click)="deleteArticle()">Supprimer cet articlee</button>
+</div>
+<div *ngIf="!article">
+    <p>Chargement des détails de l'article...</p>
+</div>

@@ -1,0 +1,7 @@
+<h1>Détails de l'utilisateur'</h1>
+
+<div *ngIf="user">
+    <p><strong>Nom d'utilisateur:</strong> {{ user.name }}</p>
+    <p><strong>Email :</strong> {{ user.email }}</p>
+    <p><strong>Rôle (Cliquez sur le rôle pour le switcher): <a (click)="switchRole(user._id)">{{user.role}}</a></strong></p>
+</div>
