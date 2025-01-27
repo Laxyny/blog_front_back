@@ -99,6 +99,6 @@ export class HomepageComponent implements OnInit {
   }
 
   goToArticleDetails(articleId: string){
-    this.router.navigate([`/article/${articleId}`]);
+    this.router.navigate([`/getArticle/${articleId}`]);
   }
 }

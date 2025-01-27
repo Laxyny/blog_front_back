@@ -9,7 +9,7 @@
     <div *ngIf="users.length > 0; else noUsers">
         <ul>
             <li *ngFor="let user of users">
-                <a (click)="goToUserDetails(user._id)">{{ user.name }}</a>
+                <a (click)="goToUserDetails(user._id)">{{ user.name }} - {{ user.role }}</a>
             </li>
         </ul>
     </div>
