@@ -18,6 +18,8 @@
         <p>Il n'y a pas d'utilisateur</p>
     </ng-template>
 
+</div>
+<div *ngIf="canWrite">
     <button (click)="goToCreateArticle()">Créer un article</button>
 </div>
 <div>

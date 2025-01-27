@@ -17,6 +17,7 @@ import { ApiBlogService } from '../services/blog.service';
 export class HomepageComponent implements OnInit {
   welcomeMessage: string = '';
   isAdmin: boolean = false;
+  canWrite: boolean = false;
   users: any[] = [];
   articles: any[] = [];
 
@@ -29,6 +30,7 @@ export class HomepageComponent implements OnInit {
 
   ngOnInit() {
     this.fetchUserData();
+    this.fetchArticlesData();
   }
 
   fetchUserData() {
@@ -36,6 +38,7 @@ export class HomepageComponent implements OnInit {
       next: (user: any) => {
         this.welcomeMessage = `Bienvenue, ${user.name}, vous êtes ${user.role}.`;
         this.isAdmin = user.role === 'admin';
+        this.canWrite = user.permissions.includes('write')
 
         if (this.isAdmin) {
           this.fetchUsersData();
@@ -60,14 +63,14 @@ export class HomepageComponent implements OnInit {
     });
   }
 
-  fetchAticlesData() {
+  fetchArticlesData() {
     this.getArticles.getArticles().subscribe({
-      next: (users: any[]) => {
-        this.users = users;
+      next: (articles: any[]) => {
+        this.articles = articles;
       },
       error: (error) => {
         console.error('Erreur lors de la récupération des articles :', error);
-        this.users = [];
+        this.articles = [];
       }
     });
   }

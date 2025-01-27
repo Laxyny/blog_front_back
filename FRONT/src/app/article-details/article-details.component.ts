@@ -14,7 +14,7 @@ import { ApiBlogService } from '../services/blog.service';
 })
 export class ArticleDetailsComponent implements OnInit {
   article: any = null;
-  private articleDetailsUrl = 'http://localhost:3000/article ';
+  private articleDetailsUrl = 'http://localhost:3000/getArticle';
 
   constructor(
     private route: ActivatedRoute,
