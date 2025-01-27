@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer son article</title>
+</head>
+
+<body>
+    <h1>Créer son article</h1>
+    <form id="createArticle-form">
+        <label>Titre :</label>
+        <input type="text" id="titre" required>
+        <br><br>
+        <label>Intro :</label>
+        <input type="text" id="intro" required>
+        <br><br>
+        <label>Article :</label>
+        <input type="text" id="article" required>
+        <br><br>
+        <button type="submit">Créer un article</button>
+    </form>
+    <div id="message"></div>
+
+    <script>
+        const apiUrl = 'http://localhost:3000/createArticle';
+
+        document.getElementById('createArticle-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const titre = document.getElementById('titre').value;
+            const intro = document.getElementById('intro').value;
+            const article = document.getElementById('article').value;
+            let date = new Date();
+
+            try {
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        titre,
+                        intro,
+                        article,
+                        date
+                    })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('message').innerText = "L'article a bien été créé.";
+                } else {
+                    document.getElementById('message').innerText = data.message || "Erreur lors de la création de l'article.";
+                }
+            } catch (error) {
+                document.getElementById('message').innerText = "Erreur de connexion à l'API.";
+                console.error("Erreur de création de l'article :", error);
+            }
+        });
+    </script>
+</body>
+
+</html>
