@@ -69,29 +69,26 @@ exports.createUser = async (req, res) => {
 
 exports.updateUserPermissions = async (req, res) => {
   try {
-      const { id } = req.params;
-      const { permissions } = req.body;
+    const { id } = req.params;
+    const { permissions } = req.body;
 
-      if (req.user.role !== 'admin') {
-          return res.status(403).json({ message: 'Accès refusé : administrateurs uniquement.' });
-      }
+    const validPermissions = ['read', 'write'];
+    if (!permissions.every((perm) => validPermissions.includes(perm))) {
+      return res.status(400).json({ message: 'Permissions invalides.' });
+    }
 
-      const validPermissions = ['read', 'write'];
-      if (!permissions.every((perm) => validPermissions.includes(perm))) {
-          return res.status(400).json({ message: 'Permissions invalides.' });
-      }
+    const success = await userModel.updateById(id, { permissions });
+    if (!success) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
 
-      const success = await userModel.updateById(id, { permissions });
-      if (!success) {
-          return res.status(404).json({ message: 'Utilisateur non trouvé.' });
-      }
-
-      res.json({ message: 'Permissions mises à jour avec succès.' });
+    res.json({ message: 'Permissions mises à jour avec succès.' });
   } catch (err) {
-      console.error('Erreur lors de la mise à jour des permissions :', err);
-      res.status(500).json({ message: 'Erreur lors de la mise à jour des permissions.' });
+    console.error('Erreur lors de la mise à jour des permissions :', err);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
+
 
 exports.updateUser = async (req, res) => {
   try {

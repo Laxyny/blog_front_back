@@ -15,6 +15,6 @@ router.post('/logout', userController.logout);
 router.put('/updateUser/:id', userController.updateUser);
 router.delete('/deleteUser/:id', userController.deleteUser);
 
-router.put('/users/:id/permissions', authMiddleware, isAdmin, userController.updateUserPermissions);
+router.put('/users/:id/permissions', authMiddleware, userController.updateUserPermissions);
 
 module.exports = router;

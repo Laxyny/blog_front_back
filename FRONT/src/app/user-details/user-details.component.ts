@@ -34,28 +34,15 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
-  switchRole(userId: string | null) {
-    if (!userId) return;
-
-    this.http.put(`http://localhost:3000/users/${userId}/permissions`, { withCredentials: true }).subscribe({
-      next: (user: any) => {
-        this.user = user;
-      },
-      error: (error) => {
-        console.error("Erreur lors du changement de rôle de l'utilisateur :", error);
-      }
-    });
-  }
-
   // Permissions
-  addWritePermission(userId: string | null, permission: string) {
+  addWritePermission(userId: string | null) {
     if (!userId) return;
 
     const body = {
       permissions: ['read', 'write']
     };
 
-    this.http.put(`http://localhost:3000/user/${userId}/permissions/`, body, { withCredentials: true }).subscribe({
+    this.http.put(`http://localhost:3000/users/${userId}/permissions/`, body, { withCredentials: true }).subscribe({
       next: (user: any) => {
         this.user = user;
       },
@@ -65,14 +52,14 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
-  deleteWritePermission(userId: string | null, permission: string) {
+  deleteWritePermission(userId: string | null) {
     if (!userId) return;
 
     const body = {
       permissions: ['read']
     };
 
-    this.http.put(`http://localhost:3000/user/${userId}/permissions/`, body, { withCredentials: true }).subscribe({
+    this.http.put(`http://localhost:3000/users/${userId}/permissions/`, body, { withCredentials: true }).subscribe({
       next: (user: any) => {
         this.user = user;
       },

@@ -17,7 +17,7 @@ export const routes: Routes = [
 
     //Homepage
     { path: 'homepage', component: HomepageComponent, canActivate: [AuthGuard] },
-    { path: 'user/:id', component: UserDetailsComponent }, //Aller sur la page d'un article
+    { path: 'user/:id', component: UserDetailsComponent, canActivate: [AuthGuard] }, //Aller sur la page d'un user
     { path: 'article/:id', component: ArticleDetailsComponent }, //Aller sur la page d'un article
 
     //Create article
