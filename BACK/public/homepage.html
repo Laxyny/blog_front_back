@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+</head>
+
+<body>
+    <h1>HomePage</h1>
+    <p id="welcome-message"></p>
+    <div id="admin-section" style="margin-top: 20px; display: none;">
+        <h2>Gestion des utilisateurs</h2>
+        <div id="user-list"></div>
+    </div>
+    <button id="logout-button">Se déconnecter</button>
+
+    <div id="store-info" style="margin-top: 20px;">
+        <h2>Articles</h2>
+        <div id="store-details"></div>
+    </div>
+
+
+    <script>
+        const apiUrl = 'http://localhost:3000/user';
+        const logoutUrl = 'http://localhost:3000/logout';
+        const articleUrl = 'http://localhost:3000/getAllArticles';
+
+        async function fetchUserData() {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const user = await response.json();
+                    document.getElementById('welcome-message').innerText = `Bienvenue, ${user.name}, vous êtes ${user.role}.`;
+
+                    if (user.role === 'admin') {
+                        document.getElementById('admin-section').style.display = 'block';
+                        fetchUsers();
+                    }
+
+                    if (user.role === 'admin' || user.permissions.includes('write')) {
+                        const writeLink = document.createElement('button');
+                        writeLink.innerText = 'Créer un article';
+                        writeLink.addEventListener('click', () => {
+                            window.location.href = '/createArticle';
+                        });
+                        document.body.appendChild(writeLink);
+
+                        // Récupérer les informations de la boutique
+                        fetchStoreData();
+                    }
+                } else {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des données utilisateur :', error);
+                window.location.href = '/login';
+            }
+        }
+
+        async function fetchStoreData() {
+            try {
+                const response = await fetch(articleUrl, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const articles = await response.json();
+
+                    if (articles.length > 0) {
+                        let articleDetails = '';
+                        articles.forEach(article => {
+                            articleDetails += `
+                        <div>
+                            <p><strong>Titre :</strong> ${article.titre}</p>
+                            <p><strong>Intro :</strong> ${article.intro}</p>
+                            <p><strong>Article :</strong> ${article.article}</p>
+                            <hr>
+                        </div>
+                    `;
+                        });
+                        document.getElementById('store-details').innerHTML = articleDetails;
+                    } else {
+                        document.getElementById('store-details').innerText = "Aucun article trouvé.";
+                    }
+                } else {
+                    document.getElementById('store-details').innerText = "Erreur lors de la récupération des articles.";
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des articles :', error);
+                document.getElementById('store-details').innerText = "Erreur lors de la récupération des articles.";
+            }
+        }
+
+
+        async function logout() {
+            try {
+                const response = await fetch(logoutUrl, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Erreur lors de la déconnexion :', error);
+            }
+        }
+
+        fetchUserData();
+
+        const usersUrl = 'http://localhost:3000/users';
+        const updatePermissionsUrl = 'http://localhost:3000/users';
+
+        async function fetchUsers() {
+            try {
+                const response = await fetch(usersUrl, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const users = await response.json();
+                    const userList = document.getElementById('user-list');
+
+                    userList.innerHTML = '';
+
+                    users.forEach(user => {
+                        const userElement = document.createElement('div');
+                        userElement.innerHTML = `
+                    <p><strong>Nom :</strong> ${user.name}</p>
+                    <p><strong>Email :</strong> ${user.email}</p>
+                    <p><strong>Rôle :</strong> ${user.role}</p>
+                    <p><strong>Permissions :</strong> ${user.permissions.join(', ')}</p>
+                    <button data-user-id="${user._id}" data-action="add">Ajouter permission "write"</button>
+                    <button data-user-id="${user._id}" data-action="remove">Retirer permission "write"</button>
+                    <hr>
+                `;
+
+                        userList.appendChild(userElement);
+                    });
+
+                    document.querySelectorAll('#user-list button').forEach(button => {
+                        button.addEventListener('click', async (event) => {
+                            const userId = button.getAttribute('data-user-id');
+                            const action = button.getAttribute('data-action');
+
+                            let updatedPermissions;
+
+                            const user = users.find(u => u._id === userId);
+                            if (action === 'add') {
+                                updatedPermissions = [...user.permissions, 'write'];
+                            } else if (action === 'remove') {
+                                updatedPermissions = user.permissions.filter(perm => perm !== 'write');
+                            }
+
+                            await updateUserPermissions(userId, updatedPermissions);
+                        });
+                    });
+                } else {
+                    document.getElementById('user-list').innerText = 'Erreur lors de la récupération des utilisateurs.';
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des utilisateurs :', error);
+                document.getElementById('user-list').innerText = 'Erreur lors de la récupération des utilisateurs.';
+            }
+        }
+
+        async function updateUserPermissions(userId, permissions) {
+            try {
+                const response = await fetch(`${updatePermissionsUrl}/${userId}/permissions`, {
+                    method: 'PUT',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ permissions })
+                });
+
+                if (response.ok) {
+                    alert('Permissions mises à jour avec succès.');
+                    fetchUsers();
+                } else {
+                    alert('Erreur lors de la mise à jour des permissions.');
+                }
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour des permissions :', error);
+            }
+        }
+
+
+        document.getElementById('logout-button').addEventListener('click', logout);
+    </script>
+
+</body>
+
+</html>
