@@ -43,15 +43,14 @@ export class ArticleDetailsComponent implements OnInit {
   }
 
   deleteArticle() {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
+    //Confirmer que l'on veut supprimer l'article et afficher un popup au cas ou l'utilisateur qui veut supprimer l'article n'est pas l'auteur sauf si c'est un admin
+    if (confirm('Voulez-vous vraiment supprimer cet article ?')) {
       this.deleteArticleService.deleteArticle(this.article._id).subscribe({
         next: () => {
-          alert("L'article' a été supprimée avec succès.");
           this.router.navigate(['/homepage']);
         },
         error: (error) => {
-          console.error("Erreur lors de la suppression de l'article :", error);
-          alert("Une erreur est survenue lors de la suppression de l'article");
+          console.error('Erreur lors de la suppression de l\'article :', error);
         }
       });
     }

@@ -1,3 +1,5 @@
+const { ObjectId } = require("mongodb");
+
 class ArticleModel {
     constructor(collection) {
         this.collection = collection;
@@ -8,9 +10,14 @@ class ArticleModel {
     }
 
     async getById(id) {
-        return this.collection.findOne({ _id: id });
+        try {
+            return await this.collection.findOne({ _id: new ObjectId(id) });
+        } catch (err) {
+            console.error('Erreur dans getById :', err);
+            throw err;
+        }
     }
-    
+
 
     async create(newArticle) {
 
