@@ -34,7 +34,7 @@ exports.getUserArticles = async (req, res) => {
     try {
         const userId = req.user.userId;
 
-        const articles = await articleModel.collection.find({ userId: userId }).toArray(); // Trouve toutes les boutiques
+        const articles = await articleModel.collection.find({ userId: userId }).toArray(); // Trouve toutes les articles
         if (!articles || articles.length === 0) {
             return res.status(404).json({ message: "Aucun article trouvée pour cet utilisateur." });
         }
