@@ -3,5 +3,13 @@
 <div *ngIf="user">
     <p><strong>Nom d'utilisateur:</strong> {{ user.name }}</p>
     <p><strong>Email :</strong> {{ user.email }}</p>
-    <p><strong>Rôle (Cliquez sur le rôle pour le switcher): <a (click)="switchRole(user._id)">{{user.role}}</a></strong></p>
+    <p><strong>Permission(s) : <a>{{user.permissions}}</a>
+    <div *ngIf="user.permissions.includes('write'); else addPerm">
+        <button (click)="deleteWritePermission(user._id, 'write')">Supprimer la perm write</button>
+    </div>
+
+    <ng-template #addPerm>
+        <button (click)="addWritePermission(user._id, 'write')">Ajouter la perm write</button>
+    </ng-template>
+    </strong></p>
 </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import {  NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-user-details',
@@ -34,7 +34,7 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
-  switchRole(userId: string | null){
+  switchRole(userId: string | null) {
     if (!userId) return;
 
     this.http.put(`http://localhost:3000/users/${userId}/permissions`, { withCredentials: true }).subscribe({
@@ -43,6 +43,41 @@ export class UserDetailsComponent implements OnInit {
       },
       error: (error) => {
         console.error("Erreur lors du changement de rôle de l'utilisateur :", error);
+      }
+    });
+  }
+
+  // Permissions
+  addWritePermission(userId: string | null, permission: string) {
+    if (!userId) return;
+
+    const body = {
+      permissions: ['read', 'write']
+    };
+
+    this.http.put(`http://localhost:3000/user/${userId}/permissions/`, body, { withCredentials: true }).subscribe({
+      next: (user: any) => {
+        this.user = user;
+      },
+      error: (error) => {
+        console.error("Erreur lors de l'ajout de permission à l'utilisateur :", error);
+      }
+    });
+  }
+
+  deleteWritePermission(userId: string | null, permission: string) {
+    if (!userId) return;
+
+    const body = {
+      permissions: ['read']
+    };
+
+    this.http.put(`http://localhost:3000/user/${userId}/permissions/`, body, { withCredentials: true }).subscribe({
+      next: (user: any) => {
+        this.user = user;
+      },
+      error: (error) => {
+        console.error("Erreur lors de la suppression de permission à l'utilisateur :", error);
       }
     });
   }
