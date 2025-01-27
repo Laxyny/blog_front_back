@@ -39,6 +39,11 @@
                     const user = await response.json();
                     document.getElementById('welcome-message').innerText = `Bienvenue, ${user.name}, vous êtes ${user.role}.`;
 
+                    if (user.role === 'admin') {
+                        document.getElementById('admin-section').style.display = 'block';
+                        fetchUsers();
+                    }
+
                     if (user.role === 'admin' || user.permissions.includes('write')) {
                         const writeLink = document.createElement('button');
                         writeLink.innerText = 'Créer un article';
