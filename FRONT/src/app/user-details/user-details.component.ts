@@ -45,6 +45,7 @@ export class UserDetailsComponent implements OnInit {
     this.http.put(`http://localhost:3000/users/${userId}/permissions/`, body, { withCredentials: true }).subscribe({
       next: (user: any) => {
         this.user = user;
+        this.fetchUserDetails(userId);
       },
       error: (error) => {
         console.error("Erreur lors de l'ajout de permission à l'utilisateur :", error);
@@ -62,6 +63,7 @@ export class UserDetailsComponent implements OnInit {
     this.http.put(`http://localhost:3000/users/${userId}/permissions/`, body, { withCredentials: true }).subscribe({
       next: (user: any) => {
         this.user = user;
+        this.fetchUserDetails(userId);
       },
       error: (error) => {
         console.error("Erreur lors de la suppression de permission à l'utilisateur :", error);
