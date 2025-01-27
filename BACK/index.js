@@ -31,7 +31,6 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-//Middleware pour le front
 app.use(cors({
     origin: 'http://localhost:4200',
     credentials: true,
@@ -39,7 +38,6 @@ app.use(cors({
 
 async function run() {
     try {
-        // Connexion à la base de données
         await client.connect();
         const database = client.db("Stockage");
 
@@ -57,33 +55,27 @@ async function run() {
             res.sendFile(__dirname + '/public/homepage.html');
         });
 
-        // Route pour afficher le form de connexion
         app.get('/login', (req, res) => {
             res.sendFile(__dirname + '/public/login.html');
         });
 
-        //Route pour le register
         app.get('/register', (req, res) => {
             res.sendFile(__dirname + '/public/register.html');
         });
 
-        //route pour créer son magasin
         app.get('/createArticle', authMiddleware, (req, res) => {
             res.sendFile(__dirname + '/public/createArticle.html');
         });
 
-        // Gérer les erreurs 500 (erreurs serveur)
         app.use((err, req, res, next) => {
             console.error(err.stack);
             res.status(500).json({ message: 'Erreur interne du serveur' });
         });
 
-        // Middleware
         app.use((req, res, next) => {
             res.status(404).send('404 Page non trouvée');
         });
 
-        // Démarrer le serveur
         app.listen(port, () => {
             console.log(`API en cours d'exécution sur http://localhost:${port}`);
         });
